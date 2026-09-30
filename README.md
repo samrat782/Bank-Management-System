@@ -202,3 +202,5 @@ production you'd want to add: HTTPS, refresh tokens, rate limiting on
 login, audit logging, stronger secret management (the JWT secret is
 currently in plain text in `application.properties`), and two-factor
 authentication — none of which real banks skip.
+#   B a n k - M a n a g e m e n t - S y s t e m  
+ 
