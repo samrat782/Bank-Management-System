@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log In — Apna Bank</title>
+  <meta name="description" content="Securely log in to your Apna Bank Net Banking account to manage your finances." />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="auth-page">
+
+  <div class="auth-split">
+    <!-- Left Brand Panel -->
+    <div class="auth-brand-panel">
+      <div class="auth-brand-content">
+        <div class="auth-brand-logo">AB</div>
+        <h2>Apna Bank</h2>
+        <p class="tagline">Your trusted partner for safe, seamless and smart digital banking.</p>
+
+        <ul class="auth-features">
+          <li>
+            <span class="feature-icon">🔒</span>
+            <span>256-bit SSL Encrypted Transactions</span>
+          </li>
+          <li>
+            <span class="feature-icon">⚡</span>
+            <span>Instant Fund Transfers 24×7</span>
+          </li>
+          <li>
+            <span class="feature-icon">📊</span>
+            <span>Real-time Account Statements</span>
+          </li>
+          <li>
+            <span class="feature-icon">🛡️</span>
+            <span>Multi-Layer Security Protection</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Right Form Panel -->
+    <div class="auth-form-panel">
+      <div class="auth-card">
+        <div class="auth-brand">
+          <div class="mark">AB</div>
+          <div>
+            <div class="name">Apna Bank</div>
+            <div class="tag">Net Banking</div>
+          </div>
+        </div>
+
+        <h1>Welcome back</h1>
+        <p class="lead">Log in to manage your accounts, transfers and statements.</p>
+
+        <div class="login-mode" role="tablist" aria-label="Choose login type">
+          <button type="button" class="active" id="customerLoginMode" role="tab" aria-selected="true">Customer login</button>
+          <button type="button" id="adminLoginMode" role="tab" aria-selected="false">Administrator login</button>
+        </div>
+
+        <div id="loginAlert" class="alert"></div>
+
+        <form id="loginForm">
+          <div class="field">
+            <label for="username">User ID</label>
+            <input type="text" id="username" name="username" placeholder="Enter your user ID" required autocomplete="username" />
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required autocomplete="current-password" />
+          </div>
+          <button type="submit" class="btn btn-primary" id="loginBtn">Log In</button>
+        </form>
+
+        <div class="auth-footer">
+          New to Apna Bank? <a href="register.html">Open an account</a>
+        </div>
+
+        <div class="demo-hint">
+          Demo login &mdash; User ID: <b>demo_user</b> &nbsp; Password: <b>Demo@1234</b>
+        </div>
+        <div class="demo-hint admin-demo-hint" id="adminDemoHint" hidden>
+          Administrator demo &mdash; User ID: <b>bank_admin</b> &nbsp; Password: <b>Admin@1234</b>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/login.js"></script>
+</body>
+</html>

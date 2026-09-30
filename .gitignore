@@ -1,0 +1,10 @@
+backend/target/
+backend/.mvn/
+backend/mvnw
+backend/mvnw.cmd
+*.class
+*.log
+.idea/
+*.iml
+.vscode/settings.json
+.DS_Store
