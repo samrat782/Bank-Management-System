@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # SecureTrust Bank — Banking Management System
 
 A full-stack banking management system inspired by net-banking portals like
@@ -205,3 +206,7 @@ authentication — none of which real banks skip.
 #   B a n k - M a n a g e m e n t - S y s t e m  
  #   B a n k - M a n a g e m e n t - S y s t e m  
  
+=======
+# Bank-Management-System
+This for my college oops project
+>>>>>>> ad199e37bfbbff5506c33dc6478cabac9b53fb97
