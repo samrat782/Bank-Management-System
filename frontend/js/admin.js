@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", async () => {
   Auth.requireAdmin();
   if (Auth.getUser()?.role !== "ADMIN") return;

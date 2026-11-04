@@ -4,15 +4,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const user = Auth.getUser();
   const adminLink = document.getElementById("adminNavLink");
   if (adminLink && user?.role === "ADMIN") adminLink.hidden = false;
-  const adminSignInLink = document.getElementById("adminSignInLink");
-  if (adminSignInLink && user?.role === "CUSTOMER") {
-    adminSignInLink.hidden = false;
-    adminSignInLink.addEventListener("click", (event) => {
-      event.preventDefault();
-      Auth.clearSession();
-      window.location.href = "index.html?mode=admin";
-    });
-  }
   const userRole = document.getElementById("userRole");
   if (userRole && user?.role === "ADMIN") userRole.textContent = "Bank Administrator";
 
@@ -89,23 +80,6 @@ async function loadAccountsAndTransactions() {
       primaryEl.textContent = type + " Account · XXXX XXXX " + acc.accountNumber.slice(-4);
     }
 
-    // ---- Populate Account List Panel ----
-    const panel = document.getElementById("accountListPanel");
-    if (panel) {
-      panel.innerHTML = accounts.map((acc) => {
-        const type = acc.accountType.charAt(0) + acc.accountType.slice(1).toLowerCase();
-        return `
-          <div class="account-item">
-            <div>
-              <div class="account-item-name">${type} Account</div>
-              <div class="account-item-number">XXXX XXXX ${acc.accountNumber.slice(-4)}</div>
-            </div>
-            <div class="account-item-balance">${formatCurrency(acc.balance)}</div>
-          </div>
-        `;
-      }).join("");
-    }
-
     // Also populate hidden grid for backward compat
     const grid = document.getElementById("accountGrid");
     if (grid) grid.innerHTML = accounts.map(renderAccountCard).join("");
@@ -114,6 +88,19 @@ async function loadAccountsAndTransactions() {
     const historyLists = await Promise.all(
       accounts.map((acc) => Api.history(acc.accountNumber).catch(() => []))
     );
+
+    // ---- Populate Account List Panel ----
+    const panel = document.getElementById("accountListPanel");
+    if (panel) {
+      panel.innerHTML = accounts.map((acc, index) => {
+        const type = acc.accountType.charAt(0) + acc.accountType.slice(1).toLowerCase();
+        const latest = (historyLists[index] || []).slice().sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        )[0];
+        return renderAccountListItem(acc, type, latest);
+      }).join("");
+    }
+
     const allTxns = historyLists.flat();
 
     const seen = new Set();
@@ -149,6 +136,41 @@ async function loadAccountsAndTransactions() {
     showAlert("dashboardAlert", err.message, "error");
     txnContainer.innerHTML = `<div class="empty-state">Could not load transactions.</div>`;
   }
+}
+
+function renderAccountListItem(account, type, latest) {
+  const latestToday = latest && isToday(new Date(latest.createdAt)) ? latest : null;
+  let recentMarkup = `<span class="account-item-recent-empty">No transaction found today</span>`;
+
+  if (latestToday) {
+    const isDebit = latestToday.type === "WITHDRAW" ||
+      (latestToday.type === "TRANSFER" && latestToday.fromAccountNumber === account.accountNumber);
+    const description = latestToday.description || latestToday.type.charAt(0) + latestToday.type.slice(1).toLowerCase();
+    recentMarkup = `
+      <span class="account-item-recent-description" title="${escapeDashboardHTML(description)}">${escapeDashboardHTML(description)} · Today</span>
+      <span class="account-item-recent-amount ${isDebit ? "debit" : "credit"}">${isDebit ? "− " : "+ "}${formatCurrency(latestToday.amount)}</span>
+    `;
+  }
+
+  return `
+    <div class="account-item">
+      <div class="account-item-main">
+        <div class="account-item-name">${escapeDashboardHTML(type)} Account</div>
+        <div class="account-item-number">XXXX XXXX ${escapeDashboardHTML(account.accountNumber.slice(-4))}</div>
+        <div class="account-item-recent">
+          <span class="account-item-recent-label">Recent</span>
+          ${recentMarkup}
+        </div>
+      </div>
+      <div class="account-item-balance">${formatCurrency(account.balance)}</div>
+    </div>
+  `;
+}
+
+function escapeDashboardHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, (character) => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+  })[character]);
 }
 
 function renderAccountCard(account) {

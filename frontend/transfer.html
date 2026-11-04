@@ -4,7 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Fund Transfer — Apna Bank</title>
-  <meta name="description" content="Transfer funds instantly between Apna Bank accounts." />
+  <meta name="description" content="Transfer funds between Apna Bank accounts or simulate an external bank transfer." />
+  <script src="js/theme.js"></script>
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
@@ -64,24 +65,64 @@
         <div class="welcome-row">
           <div>
             <h1>Fund Transfer</h1>
-            <p>Move money between your own accounts or to another Apna Bank account.</p>
+            <p>Transfer to Apna Bank accounts or record an external-bank demo transfer.</p>
           </div>
         </div>
 
         <div class="card form-card">
           <div class="card-title">Transfer details</div>
-          <div class="card-subtitle">Funds are transferred instantly between Apna Bank accounts.</div>
+          <div class="card-subtitle" id="transferSubtitle">Funds are transferred instantly between Apna Bank accounts.</div>
 
           <div id="transferAlert" class="alert"></div>
+
+          <div class="transfer-mode-switch" role="tablist" aria-label="Transfer destination type">
+            <button type="button" class="active" id="internalTransferMode" role="tab" aria-selected="true">Apna Bank</button>
+            <button type="button" id="externalTransferMode" role="tab" aria-selected="false">Other bank</button>
+          </div>
 
           <form id="transferForm">
             <div class="field">
               <label for="fromAccount">From account</label>
               <select id="fromAccount" class="select-account" required></select>
             </div>
-            <div class="field">
+            <div class="field" id="internalRecipientFields">
               <label for="toAccountNumber">To account number</label>
               <input type="text" id="toAccountNumber" placeholder="e.g. STBK1000000002" required />
+            </div>
+            <div class="external-recipient-fields" id="externalRecipientFields" hidden>
+              <div class="demo-transfer-notice" role="note">
+                Demo only: this records a simulated transfer in this app. No money is sent through a real bank network.
+              </div>
+              <div class="row-2">
+                <div class="field">
+                  <label for="beneficiaryName">Beneficiary full name</label>
+                  <input type="text" id="beneficiaryName" maxlength="100" autocomplete="name" />
+                </div>
+                <div class="field">
+                  <label for="beneficiaryBankName">Bank name</label>
+                  <input type="text" id="beneficiaryBankName" maxlength="100" />
+                </div>
+              </div>
+              <div class="row-2">
+                <div class="field">
+                  <label for="beneficiaryAccountNumber">Account number</label>
+                  <input type="text" id="beneficiaryAccountNumber" inputmode="numeric" pattern="[0-9]{6,18}" maxlength="18" autocomplete="off" />
+                </div>
+                <div class="field">
+                  <label for="confirmBeneficiaryAccountNumber">Confirm account number</label>
+                  <input type="text" id="confirmBeneficiaryAccountNumber" inputmode="numeric" pattern="[0-9]{6,18}" maxlength="18" autocomplete="off" />
+                </div>
+              </div>
+              <div class="row-2">
+                <div class="field">
+                  <label for="beneficiaryIfsc">IFSC code</label>
+                  <input type="text" id="beneficiaryIfsc" pattern="[A-Za-z]{4}0[A-Za-z0-9]{6}" maxlength="11" placeholder="e.g. HDFC0001234" autocapitalize="characters" />
+                </div>
+                <div class="field">
+                  <label for="beneficiaryBranch">Branch name</label>
+                  <input type="text" id="beneficiaryBranch" maxlength="100" />
+                </div>
+              </div>
             </div>
             <div class="field">
               <label for="amount">Amount (INR)</label>

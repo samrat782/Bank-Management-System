@@ -48,8 +48,12 @@ CREATE TABLE transactions (
     transaction_ref     VARCHAR(40)   NOT NULL UNIQUE,
     from_account_number VARCHAR(20),
     to_account_number   VARCHAR(20),
+    beneficiary_name    VARCHAR(100),
+    beneficiary_bank_name VARCHAR(100),
+    beneficiary_ifsc   VARCHAR(11),
+    beneficiary_branch  VARCHAR(100),
     amount              DECIMAL(15,2) NOT NULL,
-    type                VARCHAR(20)   NOT NULL,       -- DEPOSIT | WITHDRAW | TRANSFER
+    type                VARCHAR(20)   NOT NULL,       -- DEPOSIT | WITHDRAW | TRANSFER | EXTERNAL_TRANSFER
     status              VARCHAR(20)   NOT NULL DEFAULT 'SUCCESS',
     description         VARCHAR(255),
     balance_after        DECIMAL(15,2),

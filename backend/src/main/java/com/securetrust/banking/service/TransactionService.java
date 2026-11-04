@@ -1,6 +1,8 @@
 package com.securetrust.banking.service;
 
 import com.securetrust.banking.dto.DepositWithdrawRequest;
+import com.securetrust.banking.dto.ExternalTransferRequest;
+import com.securetrust.banking.dto.StatementResponse;
 import com.securetrust.banking.dto.TransactionResponse;
 import com.securetrust.banking.dto.TransferRequest;
 import com.securetrust.banking.exception.InsufficientBalanceException;
@@ -14,7 +16,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -108,6 +114,37 @@ public class TransactionService {
         return toResponse(txn);
     }
 
+    @Transactional
+    public TransactionResponse externalTransfer(ExternalTransferRequest request, String username) {
+        Account fromAccount = accountService.findOwnedAccount(request.getFromAccountNumber(), username);
+        requireActiveAccount(fromAccount);
+
+        if (fromAccount.getBalance().compareTo(request.getAmount()) < 0) {
+            throw new InsufficientBalanceException("Insufficient balance in account " + fromAccount.getAccountNumber());
+        }
+
+        fromAccount.setBalance(fromAccount.getBalance().subtract(request.getAmount()));
+        accountRepository.save(fromAccount);
+
+        Transaction txn = new Transaction();
+        txn.setTransactionRef(newRef());
+        txn.setFromAccountNumber(fromAccount.getAccountNumber());
+        txn.setToAccountNumber(request.getBeneficiaryAccountNumber());
+        txn.setBeneficiaryName(request.getBeneficiaryName().trim());
+        txn.setBeneficiaryBankName(request.getBeneficiaryBankName().trim());
+        txn.setBeneficiaryIfsc(request.getBeneficiaryIfsc().trim().toUpperCase(Locale.ROOT));
+        txn.setBeneficiaryBranch(request.getBeneficiaryBranch().trim());
+        txn.setAmount(request.getAmount());
+        txn.setType("EXTERNAL_TRANSFER");
+        txn.setStatus("SIMULATED");
+        txn.setDescription(orDefault(request.getDescription(), "Simulated external bank transfer"));
+        txn.setBalanceAfter(fromAccount.getBalance());
+        transactionRepository.save(txn);
+
+        return toResponse(txn);
+    }
+
+    @Transactional(readOnly = true)
     public List<TransactionResponse> getHistory(String accountNumber, String username) {
         // Ownership check first: throws if the account isn't the caller's.
         accountService.findOwnedAccount(accountNumber, username);
@@ -117,6 +154,64 @@ public class TransactionService {
                 .stream()
                 .map(this::toResponse)
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<TransactionResponse> getMiniStatement(String accountNumber, String username) {
+        return getHistory(accountNumber, username).stream().limit(5).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public StatementResponse getStatement(String accountNumber, String username,
+                                          LocalDate fromDate, LocalDate toDate, String requestedType) {
+        Account account = accountService.findOwnedAccount(accountNumber, username);
+        if (fromDate != null && toDate != null && fromDate.isAfter(toDate)) {
+            throw new IllegalArgumentException("The start date must be on or before the end date");
+        }
+
+        String type = requestedType == null || requestedType.isBlank()
+                ? "ALL" : requestedType.trim().toUpperCase(Locale.ROOT);
+        if (!List.of("ALL", "DEPOSIT", "WITHDRAW", "TRANSFER", "EXTERNAL_TRANSFER").contains(type)) {
+            throw new IllegalArgumentException("Unsupported transaction type: " + type);
+        }
+
+        List<Transaction> history = transactionRepository
+                .findByFromAccountNumberOrToAccountNumberOrderByCreatedAtDesc(accountNumber, accountNumber);
+        LocalDateTime start = fromDate == null ? null : fromDate.atStartOfDay();
+        LocalDateTime endExclusive = toDate == null ? null : toDate.plusDays(1).atStartOfDay();
+
+        BigDecimal netAfterPeriod = history.stream()
+                .filter(transaction -> endExclusive != null && !transaction.getCreatedAt().isBefore(endExclusive))
+                .map(transaction -> transactionDelta(transaction, accountNumber))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal closingBalance = account.getBalance().subtract(netAfterPeriod);
+
+        List<Transaction> periodTransactions = history.stream()
+                .filter(transaction -> start == null || !transaction.getCreatedAt().isBefore(start))
+                .filter(transaction -> endExclusive == null || transaction.getCreatedAt().isBefore(endExclusive))
+                .toList();
+        BigDecimal periodNet = periodTransactions.stream()
+                .map(transaction -> transactionDelta(transaction, accountNumber))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal openingBalance = closingBalance.subtract(periodNet);
+
+        List<TransactionResponse> filteredTransactions = periodTransactions.stream()
+                .filter(transaction -> "ALL".equals(type) || type.equals(transaction.getType()))
+                .map(this::toResponse)
+                .toList();
+
+        return new StatementResponse(accountNumber, fromDate, toDate, type,
+                openingBalance, closingBalance, filteredTransactions);
+    }
+
+    private BigDecimal transactionDelta(Transaction transaction, String accountNumber) {
+        if (accountNumber.equals(transaction.getFromAccountNumber())) {
+            return transaction.getAmount().negate();
+        }
+        if (accountNumber.equals(transaction.getToAccountNumber())) {
+            return transaction.getAmount();
+        }
+        return BigDecimal.ZERO;
     }
 
     private String newRef() {
@@ -143,7 +238,11 @@ public class TransactionService {
                 txn.getStatus(),
                 txn.getDescription(),
                 txn.getBalanceAfter(),
-                txn.getCreatedAt()
+                txn.getCreatedAt(),
+                txn.getBeneficiaryName(),
+                txn.getBeneficiaryBankName(),
+                txn.getBeneficiaryIfsc(),
+                txn.getBeneficiaryBranch()
         );
     }
 }

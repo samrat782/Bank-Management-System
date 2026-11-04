@@ -28,11 +28,23 @@ public class Transaction {
     @Column(name = "to_account_number", length = 20)
     private String toAccountNumber;
 
+    @Column(name = "beneficiary_name", length = 100)
+    private String beneficiaryName;
+
+    @Column(name = "beneficiary_bank_name", length = 100)
+    private String beneficiaryBankName;
+
+    @Column(name = "beneficiary_ifsc", length = 11)
+    private String beneficiaryIfsc;
+
+    @Column(name = "beneficiary_branch", length = 100)
+    private String beneficiaryBranch;
+
     @Column(nullable = false, precision = 15, scale = 2)
     private BigDecimal amount;
 
     @Column(nullable = false, length = 20)
-    private String type; // DEPOSIT | WITHDRAW | TRANSFER
+    private String type; // DEPOSIT | WITHDRAW | TRANSFER | EXTERNAL_TRANSFER
 
     @Column(nullable = false, length = 20)
     private String status = "SUCCESS";

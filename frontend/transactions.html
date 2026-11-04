@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Statement — Apna Bank</title>
   <meta name="description" content="View your complete account transaction history and statements." />
+  <script src="js/theme.js"></script>
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
@@ -50,21 +51,56 @@
       </header>
 
       <main class="main-content">
-        <div class="welcome-row"><div><h1>Account Statement</h1><p>View the full transaction history for any of your accounts.</p></div></div>
+        <div class="welcome-row statement-heading">
+          <div><h1>Account Statement</h1><p>View the full transaction history for any of your accounts.</p></div>
+          <button type="button" class="btn btn-outline" id="downloadStatementBtn" disabled>Download PDF</button>
+        </div>
 
-        <div class="card">
+        <div class="card" id="accountSelectorCard">
           <div class="card-title">Select account</div>
           <div class="card-subtitle">Choose which account's statement to view.</div>
           <select id="accountSelect" class="select-account" style="max-width:420px;"></select>
         </div>
 
-        <div class="section-title">Transactions</div>
+        <div class="section-title" id="miniStatementSectionTitle">Mini statement</div>
         <div class="card">
-          <div id="txnAlert" class="alert"></div>
-          <div id="txnContainer">
-            <div class="empty-state">Loading...</div>
-          </div>
+          <div class="card-subtitle">Your five most recent transactions.</div>
+          <div id="miniStatementContainer"><div class="empty-state">Loading...</div></div>
         </div>
+
+        <section id="statementContent">
+          <div class="section-title statement-title-row">
+            <span>Transactions</span>
+            <span id="statementPeriodLabel" class="statement-period-label"></span>
+          </div>
+          <div class="card">
+            <div id="txnAlert" class="alert"></div>
+            <div class="statement-filters" aria-label="Statement filters">
+              <label class="statement-filter-field">From date<input type="date" id="dateFrom" /></label>
+              <label class="statement-filter-field">To date<input type="date" id="dateTo" /></label>
+              <label class="statement-filter-field">Transaction type
+                <select id="typeFilter">
+                  <option value="ALL">All types</option>
+                  <option value="DEPOSIT">Deposit</option>
+                  <option value="WITHDRAW">Withdrawal</option>
+                  <option value="TRANSFER">Transfer</option>
+                  <option value="EXTERNAL_TRANSFER">External transfer</option>
+                </select>
+              </label>
+              <div class="statement-filter-actions">
+                <button type="button" class="btn btn-outline" id="applyFiltersBtn">Apply</button>
+                <button type="button" class="btn btn-quiet" id="clearFiltersBtn">Clear</button>
+              </div>
+            </div>
+
+            <div class="balance-summary" aria-live="polite">
+              <div class="balance-summary-item"><span>Opening balance</span><strong id="openingBalance">—</strong></div>
+              <div class="balance-summary-item"><span>Closing balance</span><strong id="closingBalance">—</strong></div>
+              <div class="balance-summary-item"><span>Transactions</span><strong id="statementCount">0</strong></div>
+            </div>
+            <div id="txnContainer"><div class="empty-state">Loading...</div></div>
+          </div>
+        </section>
       </main>
 
       <div class="footer-mega"><div class="footer-content"><div class="footer-mega-grid">

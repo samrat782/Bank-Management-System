@@ -226,7 +226,8 @@ public class AdminService {
         return new TransactionResponse(transaction.getTransactionRef(), transaction.getFromAccountNumber(),
                 transaction.getToAccountNumber(), transaction.getAmount(), transaction.getType(),
                 transaction.getStatus(), transaction.getDescription(), transaction.getBalanceAfter(),
-                transaction.getCreatedAt());
+            transaction.getCreatedAt(), transaction.getBeneficiaryName(), transaction.getBeneficiaryBankName(),
+            transaction.getBeneficiaryIfsc(), transaction.getBeneficiaryBranch());
     }
 
     private LoanApplicationResponse toLoanResponse(LoanApplication application) {

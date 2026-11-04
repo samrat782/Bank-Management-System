@@ -108,8 +108,22 @@ const Api = {
   transfer(payload) {
     return apiRequest("/transactions/transfer", { method: "POST", body: payload });
   },
+  externalTransfer(payload) {
+    return apiRequest("/transactions/transfer/external", { method: "POST", body: payload });
+  },
   history(accountNumber) {
     return apiRequest("/transactions/history/" + encodeURIComponent(accountNumber));
+  },
+  miniStatement(accountNumber) {
+    return apiRequest("/transactions/mini-statement/" + encodeURIComponent(accountNumber));
+  },
+  statement(accountNumber, filters = {}) {
+    const params = new URLSearchParams();
+    if (filters.fromDate) params.set("fromDate", filters.fromDate);
+    if (filters.toDate) params.set("toDate", filters.toDate);
+    if (filters.type && filters.type !== "ALL") params.set("type", filters.type);
+    const query = params.toString();
+    return apiRequest("/transactions/statement/" + encodeURIComponent(accountNumber) + (query ? "?" + query : ""));
   },
   adminStats() {
     return apiRequest("/admin/stats");

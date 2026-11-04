@@ -20,4 +20,8 @@ public class TransactionResponse {
     private String description;
     private BigDecimal balanceAfter;
     private LocalDateTime createdAt;
+    private String beneficiaryName;
+    private String beneficiaryBankName;
+    private String beneficiaryIfsc;
+    private String beneficiaryBranch;
 }

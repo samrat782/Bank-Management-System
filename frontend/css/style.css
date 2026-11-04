@@ -720,12 +720,18 @@ ul { list-style: none; }
 .account-item {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
+  gap: 12px;
   padding: 14px 0;
   border-bottom: 1px solid var(--border-light);
 }
 
 .account-item:last-child { border-bottom: none; }
+
+.account-item-main {
+  flex: 1;
+  min-width: 0;
+}
 
 .account-item-name {
   font-size: 14px;
@@ -752,6 +758,42 @@ ul { list-style: none; }
   text-align: right;
   white-space: nowrap;
 }
+
+.account-item-recent {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 3px 8px;
+  margin-top: 9px;
+  min-width: 0;
+}
+
+.account-item-recent-label {
+  grid-column: 1 / -1;
+  color: var(--text-light);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.account-item-recent-description,
+.account-item-recent-empty {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-light);
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.account-item-recent-amount {
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.account-item-recent-amount.credit { color: var(--success); }
+.account-item-recent-amount.debit { color: var(--danger); }
 
 /* ======================= OLD COMPAT: account-grid & account-card ======================= */
 /* These are injected by dashboard.js — we style them as a list instead */
@@ -793,6 +835,62 @@ table.txn-table tr:hover td {
 }
 
 table.txn-table tr:last-child td { border-bottom: none; }
+
+.statement-heading { align-items: flex-start; }
+.statement-heading .btn { width: auto; }
+.statement-title-row { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.statement-period-label { color: var(--text-secondary); font-size: 13px; font-weight: 500; }
+.statement-filters { display: grid; grid-template-columns: repeat(3, minmax(150px, 1fr)) auto; align-items: end; gap: 14px; margin-bottom: 20px; }
+.statement-filter-field { display: grid; gap: 7px; color: var(--text-secondary); font-size: 12px; font-weight: 600; }
+.statement-filter-field input, .statement-filter-field select { min-width: 0; width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); color: var(--text); background: #fafbfc; font: inherit; }
+.statement-filter-actions { display: flex; align-items: center; gap: 8px; }
+.statement-filter-actions .btn { width: auto; padding: 10px 16px; font-size: 13px; }
+.btn-quiet { border: 0; background: transparent; color: var(--text-secondary); }
+.btn-quiet:hover { color: var(--text); background: var(--bg); }
+.balance-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0 0 20px; border: 1px solid var(--border-light); border-radius: var(--radius-sm); }
+.balance-summary-item { display: grid; gap: 7px; padding: 14px 18px; }
+.balance-summary-item + .balance-summary-item { border-left: 1px solid var(--border-light); }
+.balance-summary-item span { color: var(--text-secondary); font-size: 12px; }
+.balance-summary-item strong { color: var(--text); font-size: 17px; }
+.mini-statement-list { display: grid; }
+.mini-statement-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 13px 0; border-bottom: 1px solid var(--border-light); }
+.mini-statement-row:last-child { border-bottom: 0; }
+.mini-statement-row > div { display: grid; gap: 4px; min-width: 0; }
+.mini-statement-row > div strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mini-statement-row small { color: var(--text-secondary); font-size: 12px; }
+.mini-statement-row > strong { white-space: nowrap; }
+.table-responsive { overflow-x: auto; }
+
+@media (max-width: 850px) {
+  .statement-filters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 560px) {
+  .statement-heading { flex-direction: column; }
+  .statement-heading .btn { width: 100%; }
+  .statement-filters { grid-template-columns: 1fr; }
+  .statement-filter-actions .btn { flex: 1; }
+  .balance-summary { grid-template-columns: 1fr; }
+  .balance-summary-item + .balance-summary-item { border-top: 1px solid var(--border-light); border-left: 0; }
+  .statement-title-row { align-items: flex-start; flex-direction: column; gap: 4px; }
+}
+
+@media print {
+  body { background: #fff !important; color: #111 !important; }
+  .sidebar, .top-header, .footer-mega, .site-footer, .sidebar-overlay,
+  .statement-heading .btn, .statement-filters, #miniStatementContainer,
+  #accountSelectorCard, #miniStatementSectionTitle { display: none !important; }
+  .app-layout, .main-wrapper, .main-content, #statementContent, #statementContent .card { display: block !important; width: 100% !important; margin: 0 !important; padding: 0 !important; border: 0 !important; box-shadow: none !important; }
+  .statement-heading { display: block !important; margin-bottom: 18px !important; }
+  .statement-heading h1 { font-size: 22px; }
+  .statement-title-row { display: flex !important; }
+  .balance-summary { break-inside: avoid; }
+  .table-responsive { overflow: visible; }
+  table.txn-table { font-size: 10px; }
+  table.txn-table th, table.txn-table td { padding: 7px; }
+  .pill { border: 1px solid #bbb; background: transparent !important; color: #111 !important; }
+  tr { break-inside: avoid; }
+}
 
 .pill {
   display: inline-block;
@@ -1686,8 +1784,241 @@ footer.site-footer {
 .credit-card-copy h3 { margin-top: 12px; font-size: 17px; }
 .credit-card-copy p { margin-top: 6px; color: var(--text-secondary); font-size: 13px; line-height: 1.65; }
 
+/* Light navigation rail inspired by the reference banking dashboard. */
+[hidden] { display: none !important; }
+
+.sidebar {
+  background: #fff;
+  color: #626a73;
+  border-right: 1px solid #e8ebee;
+  scrollbar-color: rgba(37, 52, 65, 0.16) transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb { background: rgba(37, 52, 65, 0.16); }
+.sidebar-logo { gap: 0; padding: 27px 26px 30px; }
+.sidebar-logo .logo-icon { display: none; }
+.sidebar-logo .logo-text { color: #229b65; font-size: 20px; font-weight: 600; letter-spacing: 0; }
+.sidebar-section { padding: 0 15px; margin-bottom: 12px; }
+.sidebar-label { color: #a0a6ad; font-size: 10px; padding: 0 12px; margin-bottom: 6px; }
+.sidebar-nav { gap: 5px; }
+.sidebar-nav a,
+.sidebar-nav button.nav-item,
+.sidebar .sidebar-nav a,
+.sidebar .sidebar-nav button.nav-item,
+.sidebar .sidebar-nav a.active,
+.sidebar .sidebar-nav a:hover,
+.sidebar .sidebar-nav button.nav-item:hover {
+  color: #646b73;
+}
+.sidebar-nav a,
+.sidebar-nav button.nav-item { padding: 10px 12px; border-radius: 4px; font-size: 13px; font-weight: 500; }
+.sidebar-nav a:hover,
+.sidebar-nav button.nav-item:hover { background: #f5f7f8; color: #28323b; }
+.sidebar-nav a.active {
+  background: linear-gradient(110deg, #f08a3c 0%, #df5148 100%);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: none;
+}
+.sidebar .sidebar-nav a.active { color: #fff; }
+.sidebar-nav .nav-icon { opacity: 1; }
+.sidebar-nav a:nth-child(1) .nav-icon { color: #3cae77; }
+.sidebar-nav a:nth-child(2) .nav-icon { color: #e87878; }
+.sidebar-nav a:nth-child(3) .nav-icon { color: #559bd7; }
+.sidebar-nav a:nth-child(4) .nav-icon { color: #e58b50; }
+.sidebar-nav a:nth-child(5) .nav-icon { color: #57b987; }
+.sidebar-nav a.active .nav-icon { color: #fff; }
+.sidebar-nav .nav-icon svg { width: 17px; height: 17px; }
+.overview-nav { gap: 5px; }
+.overview-nav a { min-height: 39px; }
+.overview-nav a:nth-child(1) .nav-icon { color: #3478f6; }
+.overview-nav a:nth-child(n+2) .nav-icon { color: #899198; }
+.overview-nav a.active .nav-icon { color: #fff; }
+.overview-nav a.nav-unavailable { color: #a4a9ae; cursor: not-allowed; pointer-events: none; }
+.overview-nav a.nav-unavailable:hover { background: transparent; color: #a4a9ae; }
+.overview-nav a.nav-unavailable .nav-icon { color: #a4a9ae; }
+.sidebar-footer { padding: 15px 16px 18px; border-top: 0; }
+.sidebar-helpline {
+  padding: 13px 14px;
+  border: 1px solid #edf0f3;
+  border-radius: 8px;
+  background: #f6f8fa;
+  color: #747c84;
+  font-size: 11px;
+}
+.sidebar-helpline strong { color: #39434c; font-size: 12px; }
+
+@media (max-width: 768px) {
+  .sidebar.open { width: 250px; }
+}
+
 @media (max-width: 700px) {
   .credit-card-layout { grid-template-columns: 1fr; gap: 20px; }
   .bank-card-preview { max-width: none; }
   .cards-section-heading { align-items: flex-start; }
+}
+
+/* ======================= THEME TOGGLE ======================= */
+.theme-toggle {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 40px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-secondary);
+  transition: background 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+
+.theme-toggle:hover {
+  background: var(--bg);
+  color: var(--text);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--primary-light);
+  outline-offset: 2px;
+}
+
+.theme-toggle svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.theme-toggle-floating {
+  position: fixed;
+  top: 18px;
+  right: 20px;
+  z-index: 300;
+  background: var(--bg-card);
+  box-shadow: var(--shadow-md);
+}
+
+/* ======================= DARK THEME ======================= */
+[data-theme="dark"] {
+  color-scheme: dark;
+  --sidebar-bg: #101820;
+  --bg: #151d25;
+  --bg-card: #202a34;
+  --border: #34414d;
+  --border-light: #2b3742;
+  --text: #e8edf2;
+  --text-secondary: #b1bdc8;
+  --text-light: #8d9aa7;
+  --success-bg: #12372d;
+  --danger-bg: #3c2024;
+  --info-bg: #1b3042;
+  --shadow: 0 1px 3px rgba(0,0,0,0.2), 0 1px 2px rgba(0,0,0,0.15);
+  --shadow-md: 0 4px 8px rgba(0,0,0,0.22), 0 2px 4px rgba(0,0,0,0.16);
+  --shadow-lg: 0 10px 25px rgba(0,0,0,0.24);
+}
+
+[data-theme="dark"] .top-header,
+[data-theme="dark"] .card,
+[data-theme="dark"] .auth-form-panel,
+[data-theme="dark"] .auth-card,
+[data-theme="dark"] .admin-stat-card,
+[data-theme="dark"] .debit-card-item,
+[data-theme="dark"] .admin-search-form input {
+  background: var(--bg-card);
+  color: var(--text);
+}
+
+[data-theme="dark"] .auth-page,
+[data-theme="dark"] .login-mode,
+[data-theme="dark"] .summary-box,
+[data-theme="dark"] .empty-state,
+[data-theme="dark"] .admin-table-wrap {
+  background: var(--bg);
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .field input,
+[data-theme="dark"] .field select,
+[data-theme="dark"] .field textarea,
+[data-theme="dark"] .header-search input {
+  background: #18222c;
+  color: var(--text);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .header-search input:focus,
+[data-theme="dark"] .login-mode button.active {
+  background: var(--bg-card);
+}
+
+[data-theme="dark"] .login-mode button.active {
+  color: #8cc8ff;
+}
+
+[data-theme="dark"] .footer-mega {
+  background: #18222c;
+  color: var(--text);
+}
+
+[data-theme="dark"] .footer-mega-col ul li a {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .admin-demo-hint {
+  background: #3a3020;
+  border-color: #67532b;
+}
+
+[data-theme="dark"] .status-blocked,
+[data-theme="dark"] .status-pending {
+  background: #3a3020;
+  color: #f5c36b;
+}
+
+.transfer-mode-switch {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  margin: 0 0 22px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+}
+
+.transfer-mode-switch button {
+  min-height: 38px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.transfer-mode-switch button.active {
+  background: var(--bg-card);
+  color: var(--primary);
+  box-shadow: var(--shadow);
+}
+
+.demo-transfer-notice {
+  margin-bottom: 18px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--info);
+  border-radius: var(--radius-sm);
+  background: var(--info-bg);
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.external-recipient-fields[hidden] {
+  display: none;
+}
+
+[data-theme="dark"] .transfer-mode-switch button.active {
+  color: #8cc8ff;
 }
