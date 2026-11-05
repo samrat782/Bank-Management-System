@@ -32,27 +32,21 @@
         <div id="cardsAlert" class="alert" role="status" aria-live="polite"></div>
 
         <section class="cards-section">
-          <div class="cards-section-heading"><div><span class="cards-kicker">LINKED TO YOUR ACCOUNTS</span><h2>Debit cards</h2><p>Digital previews for your active accounts. Only account suffixes are shown.</p></div><span class="cards-count" id="debitCardCount">Loading</span></div>
-          <div class="debit-card-grid" id="debitCards"><div class="empty-state">Loading your accounts...</div></div>
-        </section>
-
-        <section class="cards-section credit-section">
-          <div class="cards-section-heading"><div><span class="cards-kicker">CREDIT</span><h2>Credit cards</h2><p>Explore a sample credit card design.</p></div><span class="admin-status status-pending">Preview</span></div>
-          <div class="credit-card-layout">
-            <article class="bank-card-preview credit-card-preview" aria-label="Apna Rewards credit card preview">
-              <div class="bank-card-top"><span class="bank-card-brand">APNA<span> BANK</span></span><span class="bank-card-type">CREDIT</span></div>
-              <div class="bank-card-chip" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
-              <div class="bank-card-product">Rewards</div>
-              <div class="bank-card-bottom"><span>APNA REWARDS</span><span class="card-network">VISA</span></div>
-            </article>
-            <div class="credit-card-copy"><span class="admin-status status-pending">Not issued</span><h3>Apna Rewards</h3><p>This is a visual preview only. Credit card applications and issued-card management are not connected to this account yet.</p></div>
-          </div>
+          <div class="cards-section-heading"><div><span class="cards-kicker">CARD MANAGEMENT</span><h2>Your cards</h2><p>Issue, temporarily block, set spending limits, and change a card PIN.</p></div><button class="btn btn-primary" id="showIssueCard" type="button">+ Issue card</button></div>
+          <div class="card-management-note">For this demo, card settings are saved only in this browser for your signed-in account.</div>
+          <form class="card-issue-form" id="issueCardForm" hidden>
+            <div><label for="newCardType">Card type</label><select id="newCardType" required><option value="DEBIT">Debit card</option><option value="CREDIT">Credit card</option></select></div>
+            <div id="issueAccountField"><label for="newCardAccount">Linked account</label><select id="newCardAccount" required></select></div>
+            <div class="card-form-actions"><button class="btn btn-primary" type="submit">Issue card</button><button class="btn btn-outline" id="cancelIssueCard" type="button">Cancel</button></div>
+          </form>
+          <div class="debit-card-grid card-management-grid" id="debitCards"><div class="empty-state">Loading your cards...</div></div>
         </section>
       </main>
     </div>
   </div>
   <div class="sidebar-overlay" id="sidebarOverlay"></div>
   <script src="js/api.js"></script>
+  <script src="js/notifications.js"></script>
   <script src="js/cards.js"></script>
 </body>
 </html>

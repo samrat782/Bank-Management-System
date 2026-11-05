@@ -3,88 +3,89 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Log In — Apna Bank</title>
-  <meta name="description" content="Securely log in to your Apna Bank Net Banking account to manage your finances." />
-  <script src="js/theme.js"></script>
+  <title>Apna Bank | Banking that moves with you</title>
+  <meta name="description" content="Welcome to Apna Bank. Secure digital banking for your everyday life, with simple access to accounts, transfers and loans." />
   <link rel="stylesheet" href="css/style.css" />
 </head>
-<body class="auth-page">
+<body class="auth-page bank-home">
+  <header class="bank-home-header">
+    <a class="bank-home-brand" href="index.html" aria-label="Apna Bank home">
+      <span class="bank-home-mark" aria-hidden="true">A</span>
+      <span><strong>Apna Bank</strong><small>Banking for everyone</small></span>
+    </a>
+    <nav class="bank-home-nav" aria-label="Main navigation">
+      <a href="#services">Personal banking</a>
+      <a href="#security">Security</a>
+      <a href="register.html">Open an account</a>
+    </nav>
+    <a class="bank-home-signin" href="#online-banking">Sign in <span aria-hidden="true">&rarr;</span></a>
+  </header>
 
-  <div class="auth-split">
-    <!-- Left Brand Panel -->
-    <div class="auth-brand-panel">
-      <div class="auth-brand-content">
-        <div class="auth-brand-logo">AB</div>
-        <h2>Apna Bank</h2>
-        <p class="tagline">Your trusted partner for safe, seamless and smart digital banking.</p>
+  <main>
+    <section class="bank-home-hero" aria-labelledby="homeHeading">
+      <img class="bank-home-photo" src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=2200&q=85" alt="Modern city towers in the morning light" />
+      <div class="bank-home-shade"></div>
+      <div class="bank-home-hero-inner">
+        <div class="bank-home-message">
+          <div class="bank-home-eyebrow"><span></span> A better way to bank</div>
+          <h1 id="homeHeading">Your money.<br />Moving forward.</h1>
+          <p>Everyday banking that keeps life simple, from your first account to your next big plan.</p>
+          <a class="bank-home-cta" href="register.html">Explore banking <span aria-hidden="true">&rarr;</span></a>
+          <div class="bank-home-promise"><span aria-hidden="true">✓</span> Secure access, wherever life takes you</div>
+        </div>
 
-        <ul class="auth-features">
-          <li>
-            <span class="feature-icon">🔒</span>
-            <span>256-bit SSL Encrypted Transactions</span>
-          </li>
-          <li>
-            <span class="feature-icon">⚡</span>
-            <span>Instant Fund Transfers 24×7</span>
-          </li>
-          <li>
-            <span class="feature-icon">📊</span>
-            <span>Real-time Account Statements</span>
-          </li>
-          <li>
-            <span class="feature-icon">🛡️</span>
-            <span>Multi-Layer Security Protection</span>
-          </li>
-        </ul>
+        <section class="bank-login-panel auth-card" id="online-banking" aria-labelledby="loginHeading">
+          <div class="bank-login-heading">
+            <div class="bank-login-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 3 4 7v2h16V7l-8-4ZM6 10v7m4-7v7m4-7v7m4-7v7M4 19h16M3 21h18" /></svg>
+            </div>
+            <div><span class="bank-login-kicker">Online banking</span><h2 id="loginHeading">Welcome back</h2></div>
+          </div>
+          <p class="lead">Sign in to your Apna Bank account.</p>
+
+          <div class="login-mode" role="tablist" aria-label="Choose login type">
+            <button type="button" class="active" id="customerLoginMode" role="tab" aria-selected="true">Customer</button>
+            <button type="button" id="adminLoginMode" role="tab" aria-selected="false">Administrator</button>
+          </div>
+
+          <div id="loginAlert" class="alert" role="status" aria-live="polite"></div>
+
+          <form id="loginForm">
+            <div class="field">
+              <label for="username">User ID</label>
+              <input type="text" id="username" name="username" placeholder="Enter your user ID" required autocomplete="username" />
+            </div>
+            <div class="field">
+              <label for="password">Password</label>
+              <input type="password" id="password" name="password" placeholder="Enter your password" required autocomplete="current-password" />
+            </div>
+            <button type="submit" class="btn btn-primary" id="loginBtn">Sign in securely <span aria-hidden="true">&rarr;</span></button>
+          </form>
+
+          <div class="bank-login-bottom">
+            <span>New to Apna Bank?</span><a href="register.html">Open an account</a>
+          </div>
+          <div class="bank-login-secure"><span aria-hidden="true">▣</span> Protected with secure sign-in</div>
+          <div class="demo-hint" hidden>Demo login &mdash; User ID: <b>demo_user</b> &nbsp; Password: <b>Demo@1234</b></div>
+          <div class="demo-hint admin-demo-hint" id="adminDemoHint" hidden>Administrator demo &mdash; User ID: <b>bank_admin</b> &nbsp; Password: <b>Admin@1234</b></div>
+        </section>
       </div>
-    </div>
+      <div class="bank-home-caption"><span>APNA BANK</span><span>Secure banking, built around you</span></div>
+    </section>
 
-    <!-- Right Form Panel -->
-    <div class="auth-form-panel">
-      <div class="auth-card">
-        <div class="auth-brand">
-          <div class="mark">AB</div>
-          <div>
-            <div class="name">Apna Bank</div>
-            <div class="tag">Net Banking</div>
-          </div>
-        </div>
+    <section class="bank-home-services" id="services" aria-label="Banking services">
+      <div class="bank-service-intro"><span>MADE FOR EVERYDAY</span><h2>Banking that fits your life.</h2></div>
+      <a class="bank-service" href="register.html"><span class="bank-service-number">01</span><strong>Accounts</strong><span>Start with the essentials <b aria-hidden="true">&rarr;</b></span></a>
+      <a class="bank-service" href="index.html#online-banking"><span class="bank-service-number">02</span><strong>Payments</strong><span>Move money with ease <b aria-hidden="true">&rarr;</b></span></a>
+      <a class="bank-service" href="index.html#online-banking"><span class="bank-service-number">03</span><strong>Loans</strong><span>Plan your next step <b aria-hidden="true">&rarr;</b></span></a>
+    </section>
+  </main>
 
-        <h1>Welcome back</h1>
-        <p class="lead">Log in to manage your accounts, transfers and statements.</p>
-
-        <div class="login-mode" role="tablist" aria-label="Choose login type">
-          <button type="button" class="active" id="customerLoginMode" role="tab" aria-selected="true">Customer login</button>
-          <button type="button" id="adminLoginMode" role="tab" aria-selected="false">Administrator login</button>
-        </div>
-
-        <div id="loginAlert" class="alert"></div>
-
-        <form id="loginForm">
-          <div class="field">
-            <label for="username">User ID</label>
-            <input type="text" id="username" name="username" placeholder="Enter your user ID" required autocomplete="username" />
-          </div>
-          <div class="field">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" placeholder="Enter your password" required autocomplete="current-password" />
-          </div>
-          <button type="submit" class="btn btn-primary" id="loginBtn">Log In</button>
-        </form>
-
-        <div class="auth-footer">
-          New to Apna Bank? <a href="register.html">Open an account</a>
-        </div>
-
-        <div class="demo-hint">
-          Demo login &mdash; User ID: <b>demo_user</b> &nbsp; Password: <b>Demo@1234</b>
-        </div>
-        <div class="demo-hint admin-demo-hint" id="adminDemoHint" hidden>
-          Administrator demo &mdash; User ID: <b>bank_admin</b> &nbsp; Password: <b>Admin@1234</b>
-        </div>
-      </div>
-    </div>
-  </div>
+  <footer class="bank-home-footer" id="security">
+    <span>&copy; 2026 Apna Bank</span>
+    <span><i></i> Your security is our priority</span>
+    <a href="tel:18002580000">24&times;7 support: 1800 258 0000</a>
+  </footer>
 
   <script src="js/api.js"></script>
   <script src="js/login.js"></script>

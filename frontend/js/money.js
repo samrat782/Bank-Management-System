@@ -45,6 +45,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         `${verb} successful. Reference: ${result.transactionRef}. New balance: ${formatCurrency(result.balanceAfter)}.`,
         "success"
       );
+      showTransactionReceiptActions("transactionReceiptActions", result, {
+        accountNumber: payload.accountNumber,
+        description: payload.description || `${verb} transaction`,
+      });
       document.getElementById("moneyForm").reset();
     } catch (err) {
       showAlert("formAlert", err.message, "error");

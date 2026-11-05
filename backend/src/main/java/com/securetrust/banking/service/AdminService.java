@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.time.LocalDate;
@@ -233,7 +234,18 @@ public class AdminService {
     private LoanApplicationResponse toLoanResponse(LoanApplication application) {
         return new LoanApplicationResponse(application.getId(), application.getUser().getUsername(),
                 application.getUser().getFullName(), application.getAmount(), application.getPurpose(),
+                application.getInterestRate(), application.getTermMonths(), monthlyPayment(application),
                 application.getStatus(), application.getAppliedAt(), application.getReviewedAt(),
                 application.getReviewNote());
+    }
+
+    private BigDecimal monthlyPayment(LoanApplication application) {
+        if (application.getInterestRate() == null || application.getTermMonths() == null) {
+            return null;
+        }
+        double monthlyRate = application.getInterestRate().doubleValue() / 1200;
+        double factor = Math.pow(1 + monthlyRate, application.getTermMonths());
+        return application.getAmount().multiply(BigDecimal.valueOf(monthlyRate * factor / (factor - 1)))
+                .setScale(2, RoundingMode.HALF_UP);
     }
 }

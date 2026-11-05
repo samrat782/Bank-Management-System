@@ -4,6 +4,8 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Max;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -17,4 +19,9 @@ public class LoanApplicationRequest {
     @NotBlank
     @Size(max = 255)
     private String purpose;
+
+    @NotNull
+    @Min(12)
+    @Max(60)
+    private Integer termMonths;
 }

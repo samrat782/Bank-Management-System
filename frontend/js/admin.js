@@ -252,13 +252,15 @@ async function loadLoans(overview = false) {
     const loans = await Api.adminLoans();
     const rows = (overview ? loans.filter((loan) => loan.status === "PENDING") : loans).map((loan) => `
       <tr><td>${escapeHTML(loan.customerName)}</td><td>${escapeHTML(loan.username)}</td><td>${escapeHTML(formatCurrency(loan.amount))}</td>
-      <td>${escapeHTML(loan.purpose)}</td><td>${statusTag(loan.status)}</td><td>${escapeHTML(formatDateTime(loan.appliedAt))}</td>
+      <td>${escapeHTML(loan.purpose)}</td><td>${escapeHTML(loan.interestRate == null ? "-" : `${loan.interestRate}%`)}</td>
+      <td>${escapeHTML(loan.termMonths == null ? "-" : `${loan.termMonths} months`)}</td><td>${escapeHTML(loan.monthlyPayment == null ? "-" : formatCurrency(loan.monthlyPayment))}</td>
+      <td>${statusTag(loan.status)}</td><td>${escapeHTML(formatDateTime(loan.appliedAt))}</td>
       <td>${escapeHTML(loan.reviewNote || "-")}</td><td>${loan.status === "PENDING" ? `
         <div class="admin-actions"><button class="admin-action approve" data-loan-id="${loan.id}" data-loan-decision="APPROVED">Approve</button>
         <button class="admin-action danger" data-loan-id="${loan.id}" data-loan-decision="REJECTED">Reject</button></div>
       ` : "-"}</td></tr>
     `);
-    renderTable(container, ["Customer", "Username", "Amount", "Purpose", "Status", "Applied", "Review note", "Decision"], rows);
+    renderTable(container, ["Customer", "Username", "Amount", "Purpose", "Rate", "Term", "Est. monthly", "Status", "Applied", "Review note", "Decision"], rows);
   } catch (error) {
     container.innerHTML = `<div class="empty-state">Could not load applications.</div>`;
     notifyAdmin(error.message);

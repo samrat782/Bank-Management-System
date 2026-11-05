@@ -98,6 +98,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         ? `Demo transfer recorded. No funds were sent to another bank. Reference: ${result.transactionRef}. New balance: ${formatCurrency(result.balanceAfter)}.`
         : `Transfer successful. Reference: ${result.transactionRef}. New balance: ${formatCurrency(result.balanceAfter)}.`;
       showAlert("transferAlert", successMessage, "success");
+      showTransactionReceiptActions("transactionReceiptActions", result, {
+        accountNumber: payload.fromAccountNumber,
+        description: payload.description || (transferMode === "external" ? "Simulated external transfer" : "Fund transfer"),
+      });
       document.getElementById("transferForm").reset();
     } catch (err) {
       showAlert("transferAlert", err.message, "error");

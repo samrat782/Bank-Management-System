@@ -71,6 +71,8 @@ CREATE TABLE loan_applications (
     user_id     BIGINT         NOT NULL,
     amount      DECIMAL(15,2)  NOT NULL,
     purpose     VARCHAR(255)   NOT NULL,
+    interest_rate DECIMAL(5,2),
+    term_months INT,
     status      VARCHAR(20)    NOT NULL DEFAULT 'PENDING',
     applied_at  DATETIME       NOT NULL DEFAULT CURRENT_TIMESTAMP,
     reviewed_at DATETIME,

@@ -31,6 +31,12 @@ public class LoanApplication {
     @Column(nullable = false, length = 255)
     private String purpose;
 
+    @Column(name = "interest_rate", precision = 5, scale = 2)
+    private BigDecimal interestRate;
+
+    @Column(name = "term_months")
+    private Integer termMonths;
+
     @Column(nullable = false, length = 20)
     private String status = "PENDING";
 

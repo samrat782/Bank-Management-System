@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notifications — Apna Bank</title>
+  <meta name="description" content="View your Apna Bank account notifications." />
+  <script src="js/theme.js"></script>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="notifications-page">
+  <header class="notifications-topbar">
+    <a class="notifications-brand" href="dashboard.html" aria-label="Apna Bank dashboard"><span>AB</span> Apna Bank</a>
+    <a class="notifications-back" href="dashboard.html">← Back to dashboard</a>
+  </header>
+
+  <main class="notifications-main">
+    <div class="notifications-page-heading">
+      <div>
+        <p class="notifications-eyebrow">ACCOUNT ACTIVITY</p>
+        <h1>Notifications</h1>
+        <p>Stay up to date with your transactions and loan applications.</p>
+      </div>
+      <button class="notifications-read-all" id="markAllReadBtn" type="button" hidden>Mark all as read</button>
+    </div>
+    <section class="notifications-card" aria-live="polite">
+      <div class="notifications-card-title"><h2>Recent updates</h2><span id="unreadCount"></span></div>
+      <div id="notificationsList"></div>
+    </section>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = Auth.getUser();
+      if (!user || user.role !== 'CUSTOMER') {
+        window.location.replace('index.html');
+        return;
+      }
+
+      const storageKey = `apna-bank-notifications:${user.username}`;
+      const list = document.getElementById('notificationsList');
+      const unreadCount = document.getElementById('unreadCount');
+      const markAllButton = document.getElementById('markAllReadBtn');
+
+      function readState() {
+        try {
+          const value = JSON.parse(localStorage.getItem(storageKey) || '{}');
+          return { ...value, notifications: Array.isArray(value.notifications) ? value.notifications : [] };
+        } catch { return { notifications: [] }; }
+      }
+      function saveState(state) { localStorage.setItem(storageKey, JSON.stringify(state)); }
+      function escapeHtml(value) {
+        return String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
+      }
+      function displayTime(value) {
+        const date = new Date(value);
+        return Number.isNaN(date.getTime()) ? 'Just now' : date.toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+      }
+      function render() {
+        const state = readState();
+        const notifications = state.notifications.slice(0, 50);
+        const unread = notifications.filter(item => !item.read).length;
+        unreadCount.textContent = unread ? `${unread} unread` : 'All caught up';
+        markAllButton.hidden = unread === 0;
+        if (!notifications.length) {
+          list.innerHTML = '<div class="notifications-empty-state"><div class="notifications-empty-icon">✓</div><h3>No notifications yet</h3><p>Transaction and loan updates will appear here.</p></div>';
+          return;
+        }
+        list.innerHTML = notifications.map(item => {
+          const isLoan = item.type === 'loan';
+          const destination = isLoan ? 'loans.html' : 'transactions.html';
+          return `<a class="notifications-page-item ${item.read ? '' : 'is-unread'}" href="${destination}" data-id="${escapeHtml(item.id)}">
+            <span class="notifications-page-icon ${isLoan ? 'loan' : 'transaction'}">${isLoan ? 'L' : '₹'}</span>
+            <span class="notifications-page-copy"><strong>${escapeHtml(item.title)}</strong><span>${escapeHtml(item.message)}</span><time>${escapeHtml(displayTime(item.createdAt))}</time></span>
+            ${item.read ? '' : '<span class="notifications-page-dot" aria-label="Unread"></span>'}
+          </a>`;
+        }).join('');
+      }
+      markAllButton.addEventListener('click', () => {
+        const state = readState();
+        state.notifications.forEach(item => { item.read = true; });
+        saveState(state);
+        render();
+      });
+      list.addEventListener('click', event => {
+        const item = event.target.closest('[data-id]');
+        if (!item) return;
+        const state = readState();
+        const notification = state.notifications.find(entry => entry.id === item.dataset.id);
+        if (notification) { notification.read = true; saveState(state); }
+      });
+      window.addEventListener('storage', event => { if (event.key === storageKey) render(); });
+      render();
+    });
+  </script>
+</body>
+</html>

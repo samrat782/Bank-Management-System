@@ -1662,6 +1662,19 @@ footer.site-footer {
   gap: 16px;
 }
 
+.loan-application-form {
+  grid-template-columns: minmax(180px, 1fr) minmax(160px, 0.8fr) minmax(140px, 0.55fr) auto;
+}
+
+.loan-estimate {
+  padding: 12px 14px;
+  border-left: 3px solid var(--primary);
+  background: #f3f6f8;
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
 .admin-inline-form .btn-primary { width: auto; margin-bottom: 14px; white-space: nowrap; }
 .admin-search-form { display: flex; gap: 10px; margin-bottom: 16px; }
 .admin-search-form input { min-width: 0; flex: 1; padding: 11px 13px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: #fff; }
@@ -1783,6 +1796,20 @@ footer.site-footer {
 .credit-card-copy { max-width: 450px; }
 .credit-card-copy h3 { margin-top: 12px; font-size: 17px; }
 .credit-card-copy p { margin-top: 6px; color: var(--text-secondary); font-size: 13px; line-height: 1.65; }
+.card-management-note { margin: -3px 0 16px; padding: 11px 13px; border-left: 3px solid var(--teal); color: var(--text-secondary); background: var(--teal-light); font-size: 12px; }
+.card-issue-form { display: grid; grid-template-columns: minmax(160px, .65fr) minmax(220px, 1fr) auto; gap: 14px; align-items: end; margin-bottom: 18px; padding: 18px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: #fff; }
+.card-issue-form label, .card-settings label { display: grid; gap: 6px; color: var(--text-secondary); font-size: 11px; font-weight: 700; }
+.card-issue-form select, .card-settings input { width: 100%; min-height: 39px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 7px; color: var(--text); background: var(--bg-card); font: inherit; }
+.card-form-actions { display: flex; gap: 8px; }
+.card-actions { display: flex; padding: 14px 2px 0; }
+.card-actions .btn { width: 100%; }
+.card-settings { display: grid; gap: 11px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
+.card-settings form { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 9px; align-items: end; }
+.card-settings form[data-action="pin"] { grid-template-columns: 1fr 1fr auto; }
+.card-settings .btn { min-height: 39px; padding: 8px 11px; font-size: 11px; white-space: nowrap; }
+.card-blocked-label { position: absolute; z-index: 2; inset: 45% 0 auto; transform: rotate(-12deg); text-align: center; color: #fff; font-size: 25px; font-weight: 900; letter-spacing: 2px; text-shadow: 0 1px 4px #000; }
+.card-is-blocked .bank-card-preview::before { content: ""; position: absolute; z-index: 1; inset: 0; background: rgba(20, 20, 20, .38); }
+@media (max-width: 700px) { .card-issue-form, .card-settings form, .card-settings form[data-action="pin"] { grid-template-columns: 1fr; } .card-form-actions { display: grid; grid-template-columns: 1fr 1fr; } }
 
 /* Light navigation rail inspired by the reference banking dashboard. */
 [hidden] { display: none !important; }
@@ -2022,3 +2049,357 @@ footer.site-footer {
 [data-theme="dark"] .transfer-mode-switch button.active {
   color: #8cc8ff;
 }
+
+/* ======================= BANK HOMEPAGE ======================= */
+.bank-home {
+  display: block;
+  min-height: 100vh;
+  padding: 0;
+  background: #f5f6f4;
+  color: #122332;
+}
+
+.bank-home-header {
+  height: 82px;
+  padding: 0 clamp(22px, 5vw, 76px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  background: #fff;
+  position: relative;
+  z-index: 3;
+}
+
+.bank-home-brand { display: flex; align-items: center; gap: 11px; flex-shrink: 0; }
+.bank-home-mark {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  background: #075d4b;
+  color: #fff;
+  font-family: Georgia, serif;
+  font-size: 28px;
+  line-height: 1;
+}
+.bank-home-brand strong { display: block; font-size: 17px; line-height: 1.2; color: #142a38; }
+.bank-home-brand small { display: block; margin-top: 3px; color: #71808a; font-size: 10px; }
+.bank-home-nav { display: flex; align-items: center; gap: clamp(20px, 3vw, 44px); }
+.bank-home-nav a { color: #3e4d56; font-size: 12px; font-weight: 600; }
+.bank-home-nav a:hover { color: #075d4b; }
+.bank-home-signin {
+  min-height: 42px;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  border: 1px solid #075d4b;
+  color: #075d4b;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.bank-home-signin:hover { background: #075d4b; color: #fff; }
+.bank-home-signin span, .bank-home-cta span { font-size: 17px; line-height: 1; }
+
+.bank-home-hero {
+  min-height: 650px;
+  position: relative;
+  isolation: isolate;
+  background: #183b3a;
+  overflow: hidden;
+}
+.bank-home-photo, .bank-home-shade { position: absolute; inset: 0; width: 100%; height: 100%; }
+.bank-home-photo { z-index: -2; object-fit: cover; object-position: center 45%; }
+.bank-home-shade {
+  z-index: -1;
+  background: linear-gradient(90deg, rgba(7, 37, 43, .84) 0%, rgba(7, 37, 43, .68) 39%, rgba(7, 37, 43, .24) 72%, rgba(7, 37, 43, .28) 100%);
+}
+.bank-home-hero-inner {
+  max-width: 1440px;
+  min-height: 650px;
+  margin: 0 auto;
+  padding: 64px clamp(28px, 6vw, 92px) 76px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(340px, 410px);
+  align-items: center;
+  gap: clamp(48px, 8vw, 128px);
+}
+.bank-home-message { max-width: 570px; color: #fff; animation: bankHomeRise .6s ease-out both; }
+.bank-home-eyebrow { display: flex; align-items: center; gap: 10px; color: #d3e2d9; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+.bank-home-eyebrow span { width: 28px; height: 1px; background: #a7cf69; }
+.bank-home-message h1 { margin: 22px 0 18px; font-size: clamp(44px, 5.1vw, 68px); font-weight: 600; line-height: 1.04; color: #fff; }
+.bank-home-message > p { max-width: 410px; color: rgba(255,255,255,.82); font-size: 15px; line-height: 1.8; }
+.bank-home-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 28px;
+  min-height: 48px;
+  margin-top: 26px;
+  padding: 0 18px;
+  background: #c5dc86;
+  color: #173a35;
+  font-size: 12px;
+  font-weight: 700;
+}
+.bank-home-cta:hover { background: #d8e9ae; }
+.bank-home-promise { margin-top: 25px; color: rgba(255,255,255,.76); font-size: 11px; }
+.bank-home-promise span { margin-right: 7px; color: #d6e99f; font-size: 15px; }
+
+.bank-login-panel {
+  width: 100%;
+  max-width: 410px;
+  padding: 28px 30px 22px;
+  background: #fff;
+  box-shadow: 0 18px 55px rgba(4, 25, 30, .25);
+  animation: bankHomeRise .7s .08s ease-out both;
+}
+.bank-login-heading { display: flex; align-items: center; gap: 13px; }
+.bank-login-icon { width: 42px; height: 42px; display: grid; place-items: center; background: #e8f0e9; color: #075d4b; }
+.bank-login-icon svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.bank-login-kicker { color: #718078; font-size: 9px; font-weight: 700; text-transform: uppercase; }
+.bank-login-heading h2 { margin: 2px 0 0; color: #182b36; font-size: 21px; line-height: 1.25; }
+.bank-login-panel p.lead { margin: 10px 0 17px; color: #6b777d; font-size: 12px; }
+.bank-login-panel .login-mode { margin-bottom: 16px; border: 0; border-radius: 0; padding: 0; gap: 18px; background: transparent; border-bottom: 1px solid #e1e6e2; }
+.bank-login-panel .login-mode button { position: relative; min-height: 36px; padding: 0 2px 9px; border-radius: 0; color: #77827d; font-size: 11px; }
+.bank-login-panel .login-mode button.active { background: transparent; color: #075d4b; box-shadow: none; }
+.bank-login-panel .login-mode button.active::after { content: ''; position: absolute; right: 0; bottom: -1px; left: 0; height: 2px; background: #075d4b; }
+.bank-login-panel .field { margin-bottom: 13px; }
+.bank-login-panel .field label { margin-bottom: 5px; color: #394a50; font-size: 11px; }
+.bank-login-panel .field input { min-height: 43px; padding: 10px 12px; border: 1px solid #d6ded9; border-radius: 0; background: #fbfcfa; font-size: 12px; }
+.bank-login-panel .field input:focus { border-color: #075d4b; outline: 2px solid rgba(7,93,75,.12); }
+.bank-login-panel .btn-primary { width: 100%; min-height: 46px; margin-top: 2px; border-radius: 0; background: #075d4b; box-shadow: none; font-size: 12px; }
+.bank-login-panel .btn-primary:hover { background: #064b3d; }
+.bank-login-panel .btn-primary span { float: right; font-size: 17px; line-height: 1; }
+.bank-login-bottom { display: flex; justify-content: center; gap: 5px; margin-top: 17px; color: #69767b; font-size: 10px; }
+.bank-login-bottom a { color: #075d4b; font-weight: 700; }
+.bank-login-secure { padding-top: 14px; margin-top: 16px; border-top: 1px solid #edf0ed; color: #7b8780; text-align: center; font-size: 9px; }
+.bank-login-secure span { margin-right: 5px; color: #075d4b; }
+.bank-home .demo-hint { display: none !important; }
+.bank-home-caption { position: absolute; right: clamp(28px, 6vw, 92px); bottom: 20px; left: clamp(28px, 6vw, 92px); display: flex; justify-content: space-between; color: rgba(255,255,255,.7); font-size: 9px; text-transform: uppercase; }
+.bank-home-caption span:first-child { letter-spacing: 1.5px; }
+
+.bank-home-services {
+  min-height: 174px;
+  padding: 30px clamp(28px, 6vw, 92px);
+  display: grid;
+  grid-template-columns: 1.4fr repeat(3, 1fr);
+  align-items: center;
+  gap: 20px;
+  background: #f5f6f4;
+}
+.bank-service-intro > span { color: #7c8b7f; font-size: 9px; font-weight: 700; }
+.bank-service-intro h2 { max-width: 230px; margin-top: 6px; color: #173b37; font-size: 19px; line-height: 1.25; }
+.bank-service { min-height: 92px; padding: 8px 0 8px 20px; display: flex; flex-direction: column; justify-content: center; border-left: 1px solid #d9e0db; }
+.bank-service-number { color: #89978d; font-size: 9px; }
+.bank-service strong { margin-top: 4px; color: #233b3b; font-size: 14px; }
+.bank-service > span:last-child { margin-top: 4px; color: #75817c; font-size: 10px; }
+.bank-service b { margin-left: 5px; color: #075d4b; }
+.bank-service:hover strong { color: #075d4b; }
+.bank-home-footer { min-height: 54px; padding: 12px clamp(28px, 6vw, 92px); display: flex; align-items: center; justify-content: space-between; gap: 16px; border-top: 1px solid #e0e5e0; background: #fff; color: #76827c; font-size: 9px; }
+.bank-home-footer i { display: inline-block; width: 6px; height: 6px; margin-right: 5px; border-radius: 50%; background: #3b8f68; }
+.bank-home-footer a { color: #40594e; font-weight: 600; }
+@keyframes bankHomeRise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (max-width: 900px) {
+  .bank-home-hero, .bank-home-hero-inner { min-height: 620px; }
+  .bank-home-hero-inner { grid-template-columns: minmax(0, 1fr) minmax(310px, 360px); gap: 32px; padding-right: 34px; padding-left: 34px; }
+  .bank-home-message h1 { font-size: 48px; }
+  .bank-login-panel { padding-right: 24px; padding-left: 24px; }
+  .bank-home-services { padding-right: 34px; padding-left: 34px; }
+}
+@media (max-width: 700px) {
+  .bank-home-header { height: 68px; padding: 0 18px; }
+  .bank-home-mark { width: 36px; height: 36px; font-size: 24px; }
+  .bank-home-brand strong { font-size: 15px; }
+  .bank-home-brand small { font-size: 9px; }
+  .bank-home-nav { display: none; }
+  .bank-home-signin { min-height: 38px; padding: 0 11px; gap: 8px; font-size: 10px; }
+  .bank-home-hero { overflow: visible; }
+  .bank-home-photo { height: 430px; object-position: center; }
+  .bank-home-shade { height: 430px; background: linear-gradient(90deg, rgba(7,37,43,.78), rgba(7,37,43,.32)); }
+  .bank-home-hero-inner { min-height: 0; padding: 58px 18px 0; display: flex; flex-direction: column; align-items: stretch; gap: 0; }
+  .bank-home-message { min-height: 330px; }
+  .bank-home-message h1 { margin-top: 18px; font-size: 43px; }
+  .bank-home-message > p { max-width: 330px; font-size: 13px; }
+  .bank-home-cta { min-height: 43px; margin-top: 18px; }
+  .bank-home-promise { margin-top: 16px; }
+  .bank-login-panel { max-width: none; padding: 24px 21px 19px; box-shadow: 0 8px 26px rgba(20,40,35,.12); }
+  .bank-home-caption { top: 402px; right: 18px; bottom: auto; left: 18px; font-size: 8px; }
+  .bank-home-caption { display: none; }
+  .bank-home-services { padding: 32px 22px; grid-template-columns: 1fr 1fr; gap: 16px 10px; }
+  .bank-service-intro { grid-column: 1 / -1; margin-bottom: 3px; }
+  .bank-service { min-height: 76px; padding-left: 12px; }
+  .bank-home-footer { padding: 16px 20px; flex-wrap: wrap; justify-content: center; text-align: center; }
+}
+@media (max-width: 380px) {
+  .bank-home-message h1 { font-size: 38px; }
+  .bank-home-message { min-height: 350px; }
+  .bank-home-caption { top: 422px; }
+  .bank-login-panel { padding-right: 16px; padding-left: 16px; }
+  .bank-login-bottom { flex-wrap: wrap; }
+}
+
+.bank-register .bank-home-hero,
+.bank-register .bank-home-hero-inner { min-height: 760px; }
+.bank-register .bank-home-hero-inner {
+  grid-template-columns: minmax(0, 1fr) minmax(400px, 480px);
+  gap: clamp(42px, 7vw, 105px);
+}
+.bank-register .bank-home-message { max-width: 540px; }
+.bank-register .bank-home-message h1 { font-size: clamp(42px, 4.5vw, 62px); }
+.bank-register-benefits { display: grid; gap: 16px; margin-top: 34px; }
+.bank-register-benefits > div { display: grid; grid-template-columns: 28px 1fr; column-gap: 10px; }
+.bank-register-benefits > div > span { grid-row: span 2; color: #d3e2a0; font-size: 10px; }
+.bank-register-benefits strong { color: #fff; font-size: 11px; }
+.bank-register-benefits small { margin-top: 2px; color: rgba(255,255,255,.72); font-size: 10px; }
+.bank-register-panel { max-width: 480px; }
+.bank-register-panel .lead { margin-bottom: 18px; }
+.bank-register-panel .row-2 { gap: 0 12px; }
+.bank-register-panel .field { margin-bottom: 10px; }
+.bank-register-panel .btn-primary { margin-top: 4px; }
+.bank-register-panel .bank-login-bottom { margin-top: 14px; }
+
+@media (max-width: 900px) {
+  .bank-register .bank-home-hero,
+  .bank-register .bank-home-hero-inner { min-height: 700px; }
+  .bank-register .bank-home-hero-inner { grid-template-columns: minmax(0, 1fr) minmax(360px, 430px); gap: 30px; }
+  .bank-register .bank-home-message h1 { font-size: 44px; }
+}
+@media (max-width: 700px) {
+  .bank-register .bank-home-hero { min-height: 0; }
+  .bank-register .bank-home-hero-inner { min-height: 0; display: flex; flex-direction: column; align-items: stretch; gap: 0; padding: 48px 18px 26px; }
+  .bank-register .bank-home-message { min-height: 310px; }
+  .bank-register .bank-home-message h1 { font-size: 40px; }
+  .bank-register .bank-register-benefits { gap: 10px; margin-top: 22px; }
+  .bank-register .bank-register-benefits > div { grid-template-columns: 22px 1fr; }
+  .bank-register .bank-login-panel { max-width: none; padding: 23px 20px 19px; }
+  .bank-register-panel .row-2 { grid-template-columns: 1fr; }
+  .bank-register .bank-home-footer { justify-content: center; }
+}
+@media (max-width: 380px) {
+  .bank-register .bank-home-message { min-height: 340px; }
+  .bank-register .bank-home-message h1 { font-size: 36px; }
+  .bank-register .bank-login-panel { padding-right: 16px; padding-left: 16px; }
+}
+
+.bill-page { width: min(1120px, 100%); }
+.bill-page [hidden] { display: none !important; }
+.bill-demo-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 14px 16px;
+  border-left: 3px solid #b9852d;
+  background: #fff8e9;
+  color: #665534;
+  font-size: 12px;
+  line-height: 1.55;
+}
+.bill-demo-notice strong { flex: 0 0 auto; color: #55421c; }
+.bill-card, .bill-review, .bill-receipt { padding: 26px; }
+.bill-card-heading { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-bottom: 22px; }
+.bill-step-label { color: var(--text-secondary); font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+.bill-card-heading h2, .bill-receipt h2 { margin: 4px 0 3px; color: var(--text); font-size: 21px; }
+.bill-card-heading p, .bill-receipt p { color: var(--text-secondary); font-size: 13px; }
+.bill-category-mark {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--success-bg);
+  color: var(--success);
+  font-size: 24px;
+  font-weight: 700;
+}
+.bill-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 18px; }
+.bill-form .field { display: flex; flex-direction: column; margin-bottom: 16px; }
+.bill-form .field > span { margin-bottom: 7px; color: var(--text); font-size: 13px; font-weight: 600; }
+.bill-form .field input, .bill-form .field select {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+}
+.bill-form .field input:focus, .bill-form .field select:focus { outline: 2px solid rgba(0,76,143,.16); border-color: var(--primary); }
+.bill-form .field select:disabled { opacity: .65; cursor: not-allowed; }
+.bill-form-actions { display: flex; align-items: flex-end; justify-content: flex-end; padding-bottom: 16px; }
+.bill-form-actions .btn { width: auto; min-width: 150px; }
+.bill-form-actions .btn span { margin-left: 14px; }
+.bill-review-status { padding: 6px 10px; background: var(--success-bg); color: var(--success); font-size: 11px; font-weight: 700; }
+.bill-summary { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--border); }
+.bill-summary > div { min-width: 0; padding: 15px 12px; border-bottom: 1px solid var(--border-light); }
+.bill-summary dt { color: var(--text-secondary); font-size: 11px; }
+.bill-summary dd { margin-top: 5px; overflow-wrap: anywhere; color: var(--text); font-size: 14px; font-weight: 600; }
+.bill-summary .bill-total { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; padding: 18px 12px; background: var(--bg); }
+.bill-summary .bill-total dt { color: var(--text); font-size: 13px; font-weight: 700; }
+.bill-summary .bill-total dd { margin: 0; color: var(--primary); font-size: 21px; }
+.bill-review-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+.bill-review-actions .btn { width: auto; min-width: 140px; }
+.bill-receipt { display: flex; align-items: flex-start; gap: 18px; border-top: 3px solid var(--success); }
+.bill-receipt-icon { width: 42px; height: 42px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 50%; background: var(--success-bg); color: var(--success); font-size: 22px; }
+.bill-receipt > div:last-child { min-width: 0; flex: 1; }
+.bill-receipt p { margin: 6px 0 18px; line-height: 1.6; }
+.bill-receipt-summary { margin-bottom: 18px; }
+.bill-receipt .btn { width: auto; }
+.transaction-receipt-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 9px; margin-top: 16px; }
+.transaction-receipt-actions[hidden] { display: none !important; }
+.transaction-receipt-actions .btn { width: auto; min-height: 38px; padding: 8px 13px; font-size: 11px; }
+.receipt-action-status { color: var(--text-secondary); font-size: 10px; }
+
+@media (max-width: 700px) {
+  .bill-demo-notice { flex-direction: column; gap: 4px; }
+  .bill-card, .bill-review, .bill-receipt { padding: 19px; }
+  .bill-form { grid-template-columns: 1fr; }
+  .bill-form-actions { padding: 0; }
+  .bill-form-actions .btn { width: 100%; }
+  .bill-review-actions { flex-direction: column-reverse; }
+  .bill-review-actions .btn { width: 100%; }
+  .bill-receipt { gap: 12px; }
+  .bill-receipt .btn { width: 100%; }
+  .transaction-receipt-actions { align-items: stretch; }
+  .transaction-receipt-actions .btn { flex: 1 1 145px; }
+  .receipt-action-status { flex: 1 0 100%; }
+}
+/* ===== NOTIFICATIONS PAGE ===== */
+.notifications-page { min-height: 100vh; background: #f5f7fb; color: #172033; }
+.notifications-topbar { height: 72px; padding: 0 clamp(24px, 6vw, 88px); display: flex; align-items: center; justify-content: space-between; background: #fff; border-bottom: 1px solid #e7ebf2; }
+.notifications-brand { display: inline-flex; align-items: center; gap: 10px; color: #172033; font-size: 20px; font-weight: 750; text-decoration: none; }
+.notifications-brand span { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 10px; color: #fff; background: #1259b7; font-size: 13px; font-weight: 800; }
+.notifications-back { color: #1559b2; font-weight: 650; text-decoration: none; }
+.notifications-back:hover { text-decoration: underline; }
+.notifications-main { width: min(920px, calc(100% - 40px)); margin: 0 auto; padding: 58px 0 80px; }
+.notifications-page-heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 28px; }
+.notifications-eyebrow { margin: 0 0 8px; color: #2865ba; font-size: 12px; font-weight: 800; letter-spacing: .11em; }
+.notifications-page-heading h1 { margin: 0; font-size: clamp(30px, 4vw, 40px); letter-spacing: -.03em; }
+.notifications-page-heading p:not(.notifications-eyebrow) { margin: 9px 0 0; color: #647187; }
+.notifications-read-all { border: 1px solid #c9d8ee; border-radius: 8px; padding: 10px 14px; color: #1559b2; background: #fff; font: inherit; font-weight: 700; cursor: pointer; white-space: nowrap; }
+.notifications-read-all:hover { background: #edf4ff; }
+.notifications-card { overflow: hidden; border: 1px solid #e1e7f0; border-radius: 15px; background: #fff; box-shadow: 0 7px 24px rgba(25, 46, 79, .06); }
+.notifications-card-title { display: flex; justify-content: space-between; align-items: center; padding: 21px 24px; border-bottom: 1px solid #e8edf4; }
+.notifications-card-title h2 { margin: 0; font-size: 18px; }
+.notifications-card-title span { color: #66758b; font-size: 14px; }
+.notifications-page-item { position: relative; display: flex; gap: 16px; align-items: flex-start; padding: 19px 24px; color: inherit; text-decoration: none; border-bottom: 1px solid #edf0f5; transition: background .15s ease; }
+.notifications-page-item:last-child { border-bottom: 0; }
+.notifications-page-item:hover { background: #f7faff; }
+.notifications-page-item.is-unread { background: #f2f7ff; }
+.notifications-page-icon { flex: 0 0 38px; display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; color: #1760bc; background: #dcecff; font-weight: 800; }
+.notifications-page-icon.loan { color: #7a4d08; background: #fff0ce; }
+.notifications-page-copy { display: grid; gap: 4px; min-width: 0; padding-right: 20px; }
+.notifications-page-copy strong { font-size: 15px; }
+.notifications-page-copy > span { color: #58667a; line-height: 1.45; }
+.notifications-page-copy time { color: #8a96a8; font-size: 13px; }
+.notifications-page-dot { position: absolute; top: 27px; right: 25px; width: 8px; height: 8px; border-radius: 50%; background: #1764c0; }
+.notifications-empty-state { padding: 68px 24px; text-align: center; color: #6c788b; }
+.notifications-empty-state h3 { margin: 14px 0 7px; color: #29364a; }
+.notifications-empty-state p { margin: 0; }
+.notifications-empty-icon { display: grid; place-items: center; width: 48px; height: 48px; margin: 0 auto; border-radius: 50%; color: #168145; background: #dcf6e6; font-size: 22px; font-weight: 800; }
+@media (max-width: 560px) { .notifications-topbar { height: 64px; padding: 0 20px; } .notifications-brand { font-size: 17px; } .notifications-back { font-size: 13px; } .notifications-main { width: min(100% - 28px, 920px); padding-top: 36px; } .notifications-page-heading { align-items: flex-start; flex-direction: column; } .notifications-page-item { padding: 17px; gap: 12px; } .notifications-card-title { padding: 18px; } .notifications-page-dot { right: 17px; } }
